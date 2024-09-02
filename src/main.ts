@@ -1,10 +1,12 @@
-import { repost } from "./repost";
 import { getMentions } from './mentions';
 import { getAccessToken } from './token';
 import { connectRedis } from "./redis";
-import 'dotenv/config';
 import { sendMessage } from "./sendMessage";
 import { listConvo } from "./list.convo";
+import { generateAgentWithProxy } from "./config/agentProxy";
+import { messageBuilder } from "./builder/message";
+import { getUrlFromUri } from "./utils/getUrl";
+import 'dotenv/config';
 
 connectRedis()
 
@@ -13,28 +15,23 @@ export async function main() {
     const startTime = new Date().toLocaleTimeString();
     console.log(`Tick executed ${startTime}`);
 
-    const { token, did } = await getAccessToken();
+    const { token } = await getAccessToken();
 
     const { mentions } = await getMentions(token);
-
     if (!mentions.length) {
       console.log("No mentions found");
-      // res.status(200).json({ message: 'No mentions found' });
       return;
     }
+
+    const agent = await generateAgentWithProxy()
     for (const mention of mentions) {
-      await listConvo(token, did);
-      // await sendMessage({
-      //   convoId: '1',
-      //   message: {
-      //     text: mention.text
-      //   },
-      // }, token);
+      const convo = await listConvo(mention.author.did, agent);
+      const url = getUrlFromUri(mention.record.reply.root.uri);
+      const message = await messageBuilder(url,mention.record.text, agent);
+      await sendMessage(convo.id, message, agent);
     }
-    // res.status(200).json({ message: 'Reposts processed successfully' });
   } catch (error) {
     console.error("Error:", error);
-    // res.status(500).json({ error: 'Internal Server Error' });
     process.exit(1);
   }
 }
