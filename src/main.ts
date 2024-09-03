@@ -45,8 +45,9 @@ export async function main() {
         const url = getUrlFromUri(record.reply.root.uri);
         const message = await messageBuilder(url, record.text, agent);
         await sendMessage(convo.id, message, agent, taggedPost);
+        continue;
       }
-
+      await saveWrongMessage(mention.uri);
       console.log("Process ended");
     } catch (error) {
       console.error("Error:", error);
