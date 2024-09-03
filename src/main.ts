@@ -6,6 +6,7 @@ import { generateAgent } from "./config/agentProxy";
 import { messageBuilder } from "./utils/message";
 import { getUrlFromUri } from "./utils/getUrl";
 import { Record } from "./interfaces/notifications";
+import cron from "node-cron";
 import "dotenv/config";
 
 connectRedis();
@@ -36,4 +37,7 @@ export async function main() {
   }
 }
 
-main();
+cron.schedule('* * * * *', () => {
+  console.log('Searching for mentions...');
+  main();
+});

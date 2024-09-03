@@ -1,14 +1,18 @@
 {
   "scripts": {
-    "dev": "npx nodemon"
+    "dev": "npx nodemon",
+    "build": "npx tsc",
+    "start:prod": "npx nodemon ./build"
   },
   "dependencies": {
     "@atproto/api": "^0.13.5",
     "dotenv": "^16.4.5",
+    "node-cron": "^3.0.3",
     "redis": "^4.7.0"
   },
   "devDependencies": {
     "@types/node": "^22.5.1",
+    "@types/node-cron": "^3.0.11",
     "nodemon": "^3.1.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
