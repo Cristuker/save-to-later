@@ -41,12 +41,9 @@ export async function main() {
       const record = mention.record as Record;
       const taggedPost = mention.uri;
       const convo = await listConvo(mention.author.did, agent);
-      if (record.reply?.root) {
         const url = getUrlFromUri(record.reply.root.uri);
         const message = await messageBuilder(url, record.text, agent);
         await sendMessage(convo.id, message, agent, taggedPost);
-        continue;
-      }
       await saveWrongMessage(mention.uri);
       console.log("Process ended");
     } catch (error) {
