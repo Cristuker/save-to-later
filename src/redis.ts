@@ -33,7 +33,7 @@ async function getSession() {
 }
 
 async function saveWrongMessage(uri: string) {
-  await redisClient.set("error", uri);
+  await redisClient.set(uri, "error");
 }
 
 async function messageWrongExists(uri: string) {
