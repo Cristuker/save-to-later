@@ -16,6 +16,10 @@ A bot to save your favorites posts at bluesky
 * TypeScript
 * dontenv
 
+## Next implmentations
+
+* Send a repost to the message when the bot can't send a DM to this profile
+
 ## Contributing
 
 Feel free to send a PR.
