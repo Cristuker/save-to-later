@@ -7,9 +7,25 @@ import { messageBuilder } from "./utils/message";
 import { getUrlFromUri } from "./utils/getUrl";
 import { Record } from "./interfaces/notifications";
 import cron from "node-cron";
+import http from 'node:http';
 import "dotenv/config";
 
 connectRedis();
+
+const PORT = 8080; // Non-standard HTTP port
+//const PORT 80; // Standard HTTP port
+
+function handleRequest(request, response) {
+  console.log(request.headers);
+  response.end('It Works!! Path Hit: ' + request.url);
+}
+
+var server = http.createServer(handleRequest);
+server.listen(PORT, function () {
+  console.log("Server listening on:", PORT);
+});
+
+
 
 export async function main() {
   try {
