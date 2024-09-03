@@ -32,5 +32,15 @@ async function getSession() {
   return result;
 }
 
+async function saveWrongMessage(uri: string) {
+  await redisClient.set("error", uri);
+}
 
-export { connectRedis, messageExists, saveMessage, saveSession, getSession };
+async function messageWrongExists(uri: string) {
+  const result = await redisClient.exists(uri);
+  return result === 1;
+}
+
+
+
+export { connectRedis, messageExists, saveMessage, saveSession, getSession, messageWrongExists, saveWrongMessage };

@@ -1,5 +1,5 @@
 import { getMentions } from "./mentions";
-import { connectRedis } from "./redis";
+import { connectRedis, saveWrongMessage } from "./redis";
 import { sendMessage } from "./sendMessage";
 import { listConvo } from "./list.convo";
 import { generateAgent } from "./config/agentProxy";
@@ -12,9 +12,7 @@ import "dotenv/config";
 
 connectRedis();
 
-const PORT = 8080; // Non-standard HTTP port
-//const PORT 80; // Standard HTTP port
-
+const PORT = 8080; 
 function handleRequest(request, response) {
   console.log(request.headers);
   response.end("It Works!! Path Hit: " + request.url);
@@ -41,13 +39,19 @@ export async function main() {
     try {
       console.log("Processing another mention");
       const record = mention.record as Record;
+      const taggedPost = mention.uri;
       const convo = await listConvo(mention.author.did, agent);
-      const url = getUrlFromUri(record.reply.root.uri);
-      const message = await messageBuilder(url, record.text, agent);
-      await sendMessage(convo.id, message, agent, url);
+      if (record.reply?.root) {
+        const url = getUrlFromUri(record.reply.root.uri);
+        const message = await messageBuilder(url, record.text, agent);
+        await sendMessage(convo.id, message, agent, taggedPost);
+      }
+
       console.log("Process ended");
     } catch (error) {
       console.error("Error:", error);
+      await saveWrongMessage(mention.uri);
+      console.log('Saving to not send again')
     }
   }
 }
@@ -56,4 +60,3 @@ cron.schedule('* * * * *', () => {
   console.log('Searching for mentions...');
   main();
 });
-
