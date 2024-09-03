@@ -14,13 +14,23 @@ const connectRedis = () => {
   })();
 };
 
-async function mentionExists(cid) {
-  const result = await redisClient.exists(cid);
+async function messageExists(uri: string) {
+  const result = await redisClient.exists(uri);
   return result === 1;
 }
 
-async function saveMention(cid) {
-  await redisClient.set(cid, "reposted");
+async function saveMessage(uri: string) {
+  await redisClient.set(uri, "sended");
 }
 
-export { connectRedis, mentionExists, saveMention };
+async function saveSession(session: string) {
+  await redisClient.set("session", session);
+}
+
+async function getSession() {
+  const result = await redisClient.get("session");
+  return result;
+}
+
+
+export { connectRedis, messageExists, saveMessage, saveSession, getSession };

@@ -1,19 +1,15 @@
-import axios from "axios";
-import "dotenv/config";
-import { ResponseListNotifications } from "./interfaces/notifications";
 import { Mentions } from "./interfaces/mentions";
+import AtpAgent from "@atproto/api";
+import "dotenv/config";
 
-export async function getMentions(token: string): Promise<Mentions> {
-  const { data } = await axios.get<ResponseListNotifications>(
-    `${process.env.API_URL}/app.bsky.notification.listNotifications`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+export async function getMentions(
+  agent: AtpAgent
+): Promise<Mentions> {
+  await agent.listNotifications();
+
+  const { data } = await agent.listNotifications();
 
   return {
     mentions: data.notifications.filter(({ reason }) => reason === "mention"),
-  };
+  } as any;
 }

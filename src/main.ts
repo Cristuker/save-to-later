@@ -1,34 +1,34 @@
-import { getMentions } from './mentions';
-import { getAccessToken } from './token';
+import { getMentions } from "./mentions";
 import { connectRedis } from "./redis";
 import { sendMessage } from "./sendMessage";
 import { listConvo } from "./list.convo";
-import { generateAgentWithProxy } from "./config/agentProxy";
-import { messageBuilder } from "./builder/message";
+import { generateAgent } from "./config/agentProxy";
+import { messageBuilder } from "./utils/message";
 import { getUrlFromUri } from "./utils/getUrl";
-import 'dotenv/config';
+import { Record } from "./interfaces/notifications";
+import "dotenv/config";
 
-connectRedis()
+connectRedis();
 
 export async function main() {
   try {
+    const agent = await generateAgent();
+
     const startTime = new Date().toLocaleTimeString();
     console.log(`Tick executed ${startTime}`);
 
-    const { token } = await getAccessToken();
-
-    const { mentions } = await getMentions(token);
+    const { mentions } = await getMentions(agent);
     if (!mentions.length) {
       console.log("No mentions found");
       return;
     }
 
-    const agent = await generateAgentWithProxy()
     for (const mention of mentions) {
+      const record = mention.record as Record;
       const convo = await listConvo(mention.author.did, agent);
-      const url = getUrlFromUri(mention.record.reply.root.uri);
-      const message = await messageBuilder(url,mention.record.text, agent);
-      await sendMessage(convo.id, message, agent);
+      const url = getUrlFromUri(record.reply.root.uri);
+      const message = await messageBuilder(url, record.text, agent);
+      await sendMessage(convo.id, message, agent, url);
     }
   } catch (error) {
     console.error("Error:", error);

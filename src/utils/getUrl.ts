@@ -1,4 +1,4 @@
 export const getUrlFromUri = (uri: string) => {
-    const postId = uri.split('/')[4]
-    return `https://bsky.app/profile/kr1s.bsky.social/post/${postId}`
+    const [,,did,,postId] = uri.split('/')
+    return `https://bsky.app/profile/${did}/post/${postId}`
 }

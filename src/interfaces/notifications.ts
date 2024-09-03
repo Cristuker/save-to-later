@@ -10,21 +10,20 @@ export interface Notification {
   cid: string;
   author: Author;
   reason: string;
-  reasonSubject: string;
-  record: Record;
+  reasonSubject?: string;
+  record: Record | {};
   isRead: boolean;
   indexedAt: string;
-  text: string;
 }
 
 export interface Author {
   did: string;
   handle: string;
-  displayName: string;
-  description: string;
-  avatar: string;
-  indexedAt: string;
-  createdAt: string;
+  displayName?: string;
+  description?: string;
+  avatar?: string;
+  indexedAt?: string;
+  createdAt?: string;
 }
 
 export interface Record {
