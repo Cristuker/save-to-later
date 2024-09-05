@@ -1,18 +1,25 @@
 {
   "scripts": {
     "dev": "npx nodemon",
-    "build": "npx tsc",
-    "start:prod": "npx nodemon ./build"
+    "start:prod": "npx nodemon ./build",
+    "build": "swc src --out-dir dist/src",
+    "build:ci": "tsc && npm run build"
   },
+  "type": "module",
   "dependencies": {
     "@atproto/api": "^0.13.5",
+    "@skyware/bot": "^0.3.2",
     "dotenv": "^16.4.5",
     "node-cron": "^3.0.3",
     "redis": "^4.7.0"
   },
   "devDependencies": {
+    "@swc/cli": "^0.4.0",
+    "@swc/core": "^1.7.23",
+    "@tsconfig/node21": "^21.0.3",
     "@types/node": "^22.5.1",
     "@types/node-cron": "^3.0.11",
+    "@types/redis": "^4.0.11",
     "nodemon": "^3.1.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"

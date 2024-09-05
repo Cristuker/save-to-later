@@ -2,7 +2,7 @@ import { getMentions } from "./mentions";
 import { connectRedis, saveWrongMessage } from "./redis";
 import { sendMessage } from "./sendMessage";
 import { listConvo } from "./list.convo";
-import { generateAgent } from "./config/agentProxy";
+import { generateAgentAndBot } from "./config/agentProxy";
 import { messageBuilder } from "./utils/message";
 import { getUrlFromUri } from "./utils/getUrl";
 import { Record } from "./interfaces/notifications";
@@ -24,37 +24,30 @@ server.listen(PORT, function () {
 });
 
 export async function main() {
-  const agent = await generateAgent();
+  const [agent, bot] = await generateAgentAndBot();
 
   const startTime = new Date().toLocaleTimeString();
   console.log(`Tick executed ${startTime}`);
 
-  const { mentions } = await getMentions(agent);
-  if (!mentions.length) {
-    console.log("No mentions found");
-    return;
-  }
 
-  for (const mention of mentions) {
+  bot.on("mention", async (mention) => {
     try {
-      console.log("Processing another mention");
-      const record = mention.record as Record;
-      const taggedPost = mention.uri;
+      console.log("Receiving mention");
+
       const convo = await listConvo(mention.author.did, agent);
-        const url = getUrlFromUri(record.reply.root.uri);
-        const message = await messageBuilder(url, record.text, agent);
-        await sendMessage(convo.id, message, agent, taggedPost);
+      const url = getUrlFromUri(mention.uri);
+      const message = await messageBuilder(url, mention.text, agent);
+      await sendMessage(convo.id, message, agent, mention.uri);
       await saveWrongMessage(mention.uri);
-      console.log("Process ended");
-    } catch (error) {
-      console.error("Error:", error);
+      await mention.like();
+      console.log("Process mention with sucess ");
+
+    } catch(error) {
+      console.error(error)
       await saveWrongMessage(mention.uri);
-      console.log('Saving to not send again')
+      console.log('Saving mention with error')
     }
-  }
+  })
 }
 
-cron.schedule('* * * * *', () => {
-  console.log('Searching for mentions...');
-  main();
-});
+main();
