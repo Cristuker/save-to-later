@@ -2,5 +2,5 @@
   "watch": ["src"],
   "ext": ".ts,.js",
   "ignore": [],
-  "exec": "nodemon --exec node --no-warnings=ExperimentalWarning --loader ts-node/esm src/main.ts"
+  "exec": "npx ts-node ./src/main.ts"
 }
