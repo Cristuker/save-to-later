@@ -2,13 +2,15 @@
   "scripts": {
     "dev": "npx nodemon",
     "start:prod": "npx nodemon ./build",
-    "build": "swc src --out-dir dist/src",
-    "build:ci": "tsc && npm run build"
+    "build": "tsc",
+    "build:ci": "tsc && npm run build",
+    "start:forever": "forever start -m 5 ./build/main.js"
   },
   "dependencies": {
     "@atproto/api": "^0.13.5",
     "@skyware/bot": "^0.3.2",
     "dotenv": "^16.4.5",
+    "forever": "^4.0.3",
     "node-cron": "^3.0.3",
     "redis": "^4.7.0"
   },

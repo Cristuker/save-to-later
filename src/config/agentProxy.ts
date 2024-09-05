@@ -4,8 +4,8 @@ import "dotenv/config";
 
 export const generateAgentAndBot = async (): Promise<[AtpAgent, any]> => {
   const skyware = await import("@skyware/bot");
-
   const bot = new skyware.Bot();
+
   const agent = new AtpAgent({
     service: "https://bsky.social",
     persistSession: async (evt: string, session: AtpSessionData | undefined) => {

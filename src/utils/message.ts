@@ -5,7 +5,7 @@ export const messageBuilder = async (url: string, message: string, agent: AtpAge
         dateStyle: 'short',
     }).format(new Date());
     const rt = new RichText({
-        text: `[Saved at ${date}]: ${message} - ${url}`
+        text: `[Saved at ${date}]: ${message} - ${url}`,
     });
     await rt.detectFacets(agent)
 
