@@ -7,7 +7,9 @@ export async function getMentions(
 ): Promise<Mentions> {
   await agent.listNotifications();
 
-  const { data } = await agent.listNotifications();
+  const { data } = await agent.listNotifications({
+    limit: 100,
+  });
 
   return {
     mentions: data.notifications.filter(({ reason }) => reason === "mention"),
