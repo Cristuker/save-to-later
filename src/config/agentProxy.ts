@@ -9,7 +9,9 @@ export const generateAgentAndBot = async (): Promise<[AtpAgent, any]> => {
   const agent = new AtpAgent({
     service: "https://bsky.social",
     persistSession: async (evt: string, session: AtpSessionData | undefined) => {
-      await saveSession(JSON.stringify(session));
+      if (session) {
+        await saveSession(JSON.stringify(session));
+      }
       console.log('Persist session');
     }
   });
