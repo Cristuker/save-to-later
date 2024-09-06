@@ -1,5 +1,4 @@
-import { createClient } from "redis";
-import "dotenv/config";
+import { createClient } from 'redis'
 
 const redisClient = createClient({
   url: process.env.REDIS_URL,
@@ -14,14 +13,6 @@ const connectRedis = () => {
   })();
 };
 
-async function messageExists(uri: string) {
-  const result = await redisClient.exists(uri);
-  return result === 1;
-}
-
-async function saveMessage(uri: string) {
-  await redisClient.set(uri, "sended");
-}
 
 async function saveSession(session: string) {
   await redisClient.set("session", session);
@@ -36,11 +27,4 @@ async function saveWrongMessage(uri: string) {
   await redisClient.set(uri, "error");
 }
 
-async function messageWrongExists(uri: string) {
-  const result = await redisClient.exists(uri);
-  return result === 1;
-}
-
-
-
-export { connectRedis, messageExists, saveMessage, saveSession, getSession, messageWrongExists, saveWrongMessage };
+export { connectRedis, saveSession, getSession, saveWrongMessage };
