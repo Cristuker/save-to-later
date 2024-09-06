@@ -4,8 +4,11 @@ export const messageBuilder = async (url: string, message: string, agent: AtpAge
     const date = new Intl.DateTimeFormat(['pt-BR'], {
         dateStyle: 'short',
     }).format(new Date());
+    console.log(message)
+    const messageWithoutMention = message.replace('@savetoread.bsky.social', '🔖')
+    console.log(messageWithoutMention)
     const rt = new RichText({
-        text: `[Saved at ${date}]: ${message} - ${url}`,
+        text: `[Saved at ${date}]: ${messageWithoutMention} - ${url}`,
     });
     await rt.detectFacets(agent)
 
