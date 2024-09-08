@@ -1,14 +1,14 @@
-import AtpAgent, { RichText } from "@atproto/api";
-
-export const sendMessage = async (
-  convoId: string,
-  message: RichText,
-  agent: AtpAgent
-) => {
+export const sendMessage = async (bot: any, did: string, message) => {
   try {
-    const proxy = agent.withProxy("bsky_chat", "did:web:api.bsky.chat");
-    await proxy.chat.bsky.convo.sendMessage({
-      convoId: convoId,
+    const botWithProxy = bot.agent.withProxy(
+      "bsky_chat",
+      "did:web:api.bsky.chat"
+    );
+    const convo = await botWithProxy.chat.bsky.convo.getConvoForMembers({
+      members: [did],
+    });
+    await botWithProxy.chat.bsky.convo.sendMessage({
+      convoId: convo.data.convo.id,
       message: {
         text: message.text,
         facets: message.facets,

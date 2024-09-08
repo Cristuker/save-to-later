@@ -24,9 +24,10 @@ A bot to save your favorites posts at bluesky
 
 This is the list of next implementations or refactors.
 
-* Change redis for a mongodb.
-* Find a way to get only new notifications.
-* 
+[ ] - When bot crash, reinitialize quickly.
+[ ] - Save events with error to try again later.
+[ ] - Don't let events errors stop the bot.
+[ ] - Clean message.
 
 ## Contributing
 

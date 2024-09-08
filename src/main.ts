@@ -6,7 +6,7 @@ import "dotenv/config";
 
 connectRedis();
 
-const PORT = 8080; 
+const PORT = 8080;
 function handleRequest(request, response) {
   console.log(request.headers);
   response.end("It Works!! Path Hit: " + request.url);
@@ -18,7 +18,7 @@ server.listen(PORT, function () {
 });
 
 export async function main() {
-  const [agent, bot] = await generateAgentAndBot();
+  const bot = await generateAgentAndBot();
 
   const startTime = new Date().toLocaleTimeString();
   console.log(`Tick executed ${startTime}`);
@@ -26,12 +26,12 @@ export async function main() {
   bot.on("mention", async (mention) => {
     try {
       console.log("Receiving mention");
-      await processMention(agent, mention);
+      await processMention(mention, bot);
       console.log("Process mention with success");
-    } catch(error) {
-      console.error(error)
+    } catch (error) {
+      console.error(error);
       await saveWrongMessage(mention.uri);
-      console.log('Saving mention with error')
+      console.log("Saving mention with error");
     }
   });
 }
