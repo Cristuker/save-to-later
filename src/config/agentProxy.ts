@@ -1,26 +1,36 @@
+import { AtpAgent, AtpSessionData } from "@atproto/api";
 import { getSession, saveSession } from "../redis";
 import "dotenv/config";
 
-export const generateAgentAndBot = async () => {
-  const skyware = await import("@skyware/bot");
-
-  const bot = new skyware.Bot({
-    emitChatEvents: true,
-  });
-  const session = await getSession();
-  if (session) {
-    try {
-      await bot.resumeSession(JSON.parse(session));
-    } catch (error) {
-      const { data } = await bot.agent.login({
-        identifier: String(process.env.IDENTIFIER),
-        password: String(process.env.PASSWORD),
-      });
-
-      await saveSession(JSON.stringify(data.session));
-      console.log("Create a new Session");
+export const generateAgent = async () => {
+  
+  const agent = new AtpAgent({
+    service: "https://bsky.social",
+    persistSession: async (evt: string, session: AtpSessionData | undefined) => {
+      if (session) {
+        await saveSession(JSON.stringify(session));
+        console.log('Persist session');
+      }
     }
+  });
+
+  const session = await getSession();
+
+  try {
+    if (session) {
+      console.log("Resume session");
+      await agent.resumeSession(JSON.parse(session));
+      return agent;
+    }
+  } catch (error) {
+    await agent.login({
+      identifier: String(process.env.IDENTIFIER),
+      password: String(process.env.PASSWORD),
+    });
+    console.log("Create a new Session");
   }
 
-  return bot;
+
+
+  return agent;
 };

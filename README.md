@@ -28,6 +28,8 @@ This is the list of next implementations or refactors.
 [ ] - Save events with error to try again later.
 [ ] - Don't let events errors stop the bot.
 [ ] - Clean message.
+[ ] - Like post when success
+[ ] - Reply post when error
 
 ## Contributing
 
