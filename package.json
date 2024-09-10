@@ -2,7 +2,7 @@
   "scripts": {
     "dev": "npx nodemon",
     "build": "npx tsc",
-    "start:prod": "npx nodemon ./build"
+    "start:prod": "pm2 start ./build/main.js"
   },
   "dependencies": {
     "@atproto/api": "^0.13.5",

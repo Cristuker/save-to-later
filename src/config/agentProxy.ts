@@ -29,8 +29,5 @@ export const generateAgent = async () => {
     });
     console.log("Create a new Session");
   }
-
-
-
   return agent;
 };
