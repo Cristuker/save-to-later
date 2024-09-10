@@ -9,6 +9,7 @@
     "@atproto/api": "^0.13.5",
     "dotenv": "^16.4.5",
     "node-cron": "^3.0.3",
+    "pm2": "^5.4.2",
     "redis": "^4.7.0"
   },
   "devDependencies": {
