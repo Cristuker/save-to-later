@@ -66,6 +66,7 @@ This is the list of next implementations or refactors.
 - [ ] - Clean message [embed or link].
 - [ ] - Like post when success.
 - [ ] - Reply post when error.
+- [ ] - Add log service
 
 ## Contributing
 
