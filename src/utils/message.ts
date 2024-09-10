@@ -1,8 +1,9 @@
+import { RichText } from "@atproto/api";
+
 export const messageBuilder = async (
   url: string,
   message: string
 ) => {
-  const { RichText } = await import("@skyware/bot");
 
   const date = new Intl.DateTimeFormat(["pt-BR"], {
     dateStyle: "short",
@@ -12,8 +13,11 @@ export const messageBuilder = async (
     "@savetoread.bsky.social",
     "🔖"
   );
-  const rt = new RichText()
-    .text(`[${date}]: ${messageWithoutMention} - `)
-    .link("Post salvo", url).build();
+
+  const text = `[${date}]: ${messageWithoutMention} - Link para o post: ${url}`;
+  const rt = new RichText({
+    text: text,
+  });
+
   return rt;
 };

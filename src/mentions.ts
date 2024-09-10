@@ -1,11 +1,19 @@
-import { sendMessage } from "./sendMessage";
-import { getUrlFromUri } from "./utils/getUrl";
-import { messageBuilder } from "./utils/message";
+import { Mentions } from "./interfaces/mentions";
+import AtpAgent from "@atproto/api";
+import { isToday } from "./utils/isToday";
 import "dotenv/config";
 
-export async function processMention(mention: any, bot: any) {
-  const url = getUrlFromUri(mention.uri);
-  const message = await messageBuilder(url, mention.text);
-  await sendMessage(bot, mention.author.did, message);
-  await mention.like();
+export async function getMentions(
+  agent: AtpAgent
+): Promise<Mentions> {
+  await agent.listNotifications();
+
+  const { data } = await agent.listNotifications({
+    limit: 100,
+  });
+
+  
+  return {
+    mentions: data.notifications.filter((notification) => notification.reason === 'mention' && isToday(notification.indexedAt)),
+  } as any;
 }
