@@ -63,8 +63,7 @@ This is the list of next implementations or refactors.
 
 - [x] - When bot crash, reinitialize quickly.
 - [x] - Save events with error to try again later.
-- [ ] - Clean message [embed or link].
-- [ ] - Like post when success.
+- [x] - Like post when success.
 - [ ] - Reply post when error.
 - [ ] - Add log service
 

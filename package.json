@@ -3,7 +3,7 @@
     "dev": "npx nodemon",
     "build": "npx tsc",
     "start:prod": "pm2 start ./build/main.js",
-    "start": "pm2 start --no-daemon ./build/main.js"
+    "start": "node ./build/main.js"
   },
   "dependencies": {
     "@atproto/api": "^0.13.5",

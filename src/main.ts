@@ -37,6 +37,7 @@ export async function main() {
       await message.detectFacets(agent);
       await sendMessage(convo.id, message, agent, taggedPost);
       await saveWrongMessage(mention.uri);
+      await agent.like(mention.uri, mention.cid);
       console.log("Process ended");
     } catch (error) {
       console.error("Error:", error);
